@@ -14,3 +14,13 @@ module "vpc" {
   source      = "./modules/vpc/"
   instance_id = module.ec2.instance_ec2_list
 }
+
+#module "acl" {
+#  source = "./modules/acl/"
+#  lb_arn = module.vpc.lb_arn.value
+#}
+
+#module "rds" {
+#  source = "./modules/rds/"
+#  sg_ec2_id = module.ec2.sg_ec2_id
+#}

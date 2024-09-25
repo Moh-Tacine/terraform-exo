@@ -36,13 +36,6 @@ resource "aws_lb_target_group" "app_target_group_1" {
   vpc_id = "vpc-098efebbad38d2e35"
 }
 
-resource "aws_lb_target_group" "app_target_group_2" {
-  name = "app-target-group-2"
-  port = 80
-  protocol = "HTTP"
-  vpc_id = "vpc-098efebbad38d2e35"
-}
-
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_alb.load_balancer.arn
   port = 80
@@ -60,7 +53,7 @@ resource "aws_lb_target_group_attachment" "lb_attachment_1" {
 }
 
 resource "aws_lb_target_group_attachment" "lb_attachment_2" {
-  target_group_arn = aws_lb_target_group.app_target_group_2.arn
+  target_group_arn = aws_lb_target_group.app_target_group_1.arn
   target_id        = var.instance_id[1]
 }
 
@@ -80,18 +73,45 @@ resource "aws_lb_listener_rule" "listener_rule_1" {
   }
 }
 
-resource "aws_lb_listener_rule" "listener_rule_2" {
-  listener_arn = aws_lb_listener.listener.arn
-  priority = 20
+#ACL Restriction by Country
+resource "aws_wafv2_web_acl" "exo_web_acl" {
+  name  = "mon_web_acl"
+  description = "web ACL Access Control List to block access to Said if you want to test you have to come to France"
+  scope = "REGIONAL"
 
-  action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.app_target_group_2.arn
+  default_action {
+    allow {}
   }
 
-  condition {
-    path_pattern {
-      values = ["/*"]
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "blockSaidAlgeria"
+    sampled_requests_enabled   = true
+  }
+
+  rule {
+    name     = "block-said-algeria"
+    priority = 1
+
+    action {
+      block {}
+    }
+
+    statement {
+      geo_match_statement {
+        country_codes = ["DZ"]
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "blockSaidAlgeria"
+      sampled_requests_enabled   = true
     }
   }
+}
+
+resource "aws_wafv2_web_acl_association" "lb_waf_association" {
+  resource_arn = aws_alb.load_balancer.arn
+  web_acl_arn  = aws_wafv2_web_acl.exo_web_acl.arn
 }
