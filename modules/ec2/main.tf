@@ -34,6 +34,7 @@ resource "aws_instance" "mon_instance_ec2" {
   security_groups = [aws_security_group.sg_ec2.id]
   subnet_id = var.subnet_list[count.index]
   user_data = templatefile(var.user_data, {ec2_instance_number = count.index })
+  iam_instance_profile = var.profile_name
 
   tags = {
     Name = "instance-${count.index}"

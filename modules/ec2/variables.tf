@@ -9,3 +9,7 @@ variable "subnet_list" {
 variable "user_data" {
   type = string
 }
+
+variable "profile_name" {
+  type = string
+}
