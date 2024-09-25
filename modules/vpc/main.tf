@@ -24,7 +24,7 @@ resource "aws_alb" "load_balancer" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg_lb.id]
-  subnets            = ["subnet-05042bc86a02fc75c", "subnet-0cb8e8ee411ccc8e9"]
+  subnets            = ["subnet-0b3d2c824f18a730b", "subnet-078925355d01c8d93"]
 
   enable_deletion_protection = false
 }
@@ -45,7 +45,7 @@ resource "aws_lb_target_group" "app_target_group_2" {
 
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_alb.load_balancer.arn
-  port = "80"
+  port = 80
   protocol = "HTTP"
 
   default_action {
@@ -66,7 +66,7 @@ resource "aws_lb_target_group_attachment" "lb_attachment_2" {
 
 resource "aws_lb_listener_rule" "listener_rule_1" {
   listener_arn = aws_lb_listener.listener.arn
-  priority = 100
+  priority = 40
 
   action {
     type = "forward"
@@ -82,7 +82,7 @@ resource "aws_lb_listener_rule" "listener_rule_1" {
 
 resource "aws_lb_listener_rule" "listener_rule_2" {
   listener_arn = aws_lb_listener.listener.arn
-  priority = 99
+  priority = 20
 
   action {
     type = "forward"

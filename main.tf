@@ -10,6 +10,7 @@ module "ec2" {
 }
 
 module "vpc" {
+  count = local.input_data.numberOfInstances > 1 ? 1 : 0
   source      = "./modules/vpc/"
   instance_id = module.ec2.instance_ec2_list
 }

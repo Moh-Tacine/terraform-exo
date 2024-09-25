@@ -2,5 +2,5 @@
 .idea/*
 .terraform
 provider.tf
-
+.terraform.lock.hcl
 *.tfstate*
