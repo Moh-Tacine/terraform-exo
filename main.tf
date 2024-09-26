@@ -29,3 +29,8 @@ module "rds" {
   source = "./modules/rds/"
   sg_ec2_id = module.ec2.sg_ec2_id
 }
+
+module "s3" {
+  source = "./modules/s3"
+  bucket_unique_name = local.input_data.bucketName
+}
