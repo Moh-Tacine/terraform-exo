@@ -32,5 +32,5 @@ module "rds" {
 
 module "s3" {
   source = "./modules/s3"
-  bucket_unique_name = local.input_data.bucketName
+  bucket_number = local.input_data.numberOfBucket
 }

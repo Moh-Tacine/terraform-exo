@@ -1,3 +1,3 @@
-variable "bucket_unique_name" {
-  type = string
+variable "bucket_number" {
+  type = number
 }

@@ -1,5 +1,7 @@
 resource "aws_s3_bucket" "exo_bucket" {
-  bucket = var.bucket_unique_name
+
+  count = var.bucket_number
+  bucket = "exo-terraform-493-${count.index}"
 
   tags = {
     Name = "Bucket name"

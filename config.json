@@ -1,5 +1,5 @@
 {
   "numberOfInstances" : 2,
   "subnets" : ["subnet-0b3d2c824f18a730b", "subnet-078925355d01c8d93"],
-  "bucketName" : "bucket-exo-terraform-1029"
+  "numberOfBucket" : 2
 }

@@ -1,11 +1,10 @@
-
 resource "aws_iam_role" "ec2_role" {
-  name = "ec2-role"
+  name               = "ec2-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
+        Effect    = "Allow"
         Principal = {
           Service = "ec2.amazonaws.com"
         }
@@ -15,35 +14,18 @@ resource "aws_iam_role" "ec2_role" {
   })
 }
 
-resource "aws_iam_policy" "ec2_access_policy" {
-
-  name = "ec2-access"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "rds:*",
-          "rds-db:*"
-        ]
-        Resource = "*"
-      },
-      {
-        Effect   = "Allow"
-        Action   = ["s3:*"]
-        Resource = [
-          "arn:aws:s3:::*",
-          "arn:aws:s3:::*/*"
-        ]
-      }
-    ]
-  })
+resource "aws_iam_role_policy_attachment" "sm_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+  role       = aws_iam_role.ec2_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "attach_rds_policy" {
-  policy_arn = aws_iam_policy.ec2_access_policy.arn
+resource "aws_iam_role_policy_attachment" "rds_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+  role       = aws_iam_role.ec2_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
   role       = aws_iam_role.ec2_role.name
 }
 
